@@ -8,7 +8,7 @@ Command line:
 Verify 
 
 > $ whereis mysql-workbench
-![cmd output](/relative/path/to/img.jpg?raw=true "Output")
+![cmd output](https://github.com/nevosial/setups/blob/master/images/verifymysqlwb.png?raw=true "Output")
 
 > $ /usr/bin/mysql-workbench --help
 
