@@ -16,5 +16,15 @@ To enter the shell
 
 
 
+#### Robo Mongo client
 
-Download and extract RoboMongo GUI client for mongodb.
+1. Download and extract RoboMongo GUI client for mongodb.
+   [here](https://robomongo.org/download)
+   
+2. Go to Extract the file
+  > $ tar -xvzf robomongo-0.9.0-linux-x86_64-0xxxxx.tar.gz
+  
+3. Go to the robo../bin and run the .sh file.
+
+
+
