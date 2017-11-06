@@ -20,3 +20,9 @@
 > mysql -uroot -p(pwd) 
 
 ![mySQL container shell](https://github.com/nevosial/setups/blob/master/images/mysqldbshell.png?raw=true "MySQL container shell")
+
+
+*note*: Use the workbench to connect; default container port is 3306. 
+ Find the ip of the container
+ 
+ > docker inspect mysqldb
