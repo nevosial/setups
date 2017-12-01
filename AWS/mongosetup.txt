@@ -1,0 +1,323 @@
+
+DO NOT USE UBUNTU 16.04 LTS.
+YOU CAN USE UBUNTU 14, 12.
+YOU CAN USE AMAZON LINUX
+
+
+command to ssh into ubuntu:
+sudo ssh -i usWestNCalikey.pem ubuntu@
+
+
+mongo1 : ec2-54-183-155-96.us-west-1.compute.amazonaws.com
+mongo2 : ec2-13-56-195-139.us-west-1.compute.amazonaws.com
+mongo3_a : ec2-54-215-203-87.us-west-1.compute.amazonaws.com
+
+
+
+Commands to setup replicaset
+
+1. Set hostname:
+
+Mongo1:
+  sudo bash -c 'echo mongoOne > /etc/hostname && hostname -F /etc/hostname'
+
+Mongo2:
+  sudo bash -c 'echo mongoTwo > /etc/hostname && hostname -F /etc/hostname'
+
+Mongo3:
+  sudo bash -c 'echo mongoThree > /etc/hostname && hostname -F /etc/hostname'
+
+
+2. increase OS limits
+
+Add following lines to sudo nano /etc/security/limits.conf
+
+* soft nofile 64000
+* hard nofile 64000
+* soft nproc 32000
+* hard nproc 32000
+
+
+
+3. create file
+create a file called 90-nproc.conf in /etc/security/limits.d/
+
+  sudo nano /etc/security/limits.d/90-nproc.conf
+
+
+  Add following lines:
+  * soft nproc 32000
+* hard nproc 32000
+
+
+4. Disable Transparent Huge Pages
+
+  sudo nano /etc/init.d/disable-transparent-hugepages
+
+Paste
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          disable-transparent-hugepages
+# Required-Start:    $local_fs
+# Required-Stop:
+# X-Start-Before:    mongod mongodb-mms-automation-agent
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Disable Linux transparent huge pages
+# Description:       Disable Linux transparent huge pages, to improve
+#                    database performance.
+### END INIT INFO
+
+case $1 in
+  start)
+    if [ -d /sys/kernel/mm/transparent_hugepage ]; then
+      thp_path=/sys/kernel/mm/transparent_hugepage
+    elif [ -d /sys/kernel/mm/redhat_transparent_hugepage ]; then
+      thp_path=/sys/kernel/mm/redhat_transparent_hugepage
+    else
+      return 0
+    fi
+
+    echo 'never' > ${thp_path}/enabled
+    echo 'never' > ${thp_path}/defrag
+
+    unset thp_path
+    ;;
+esac
+
+
+Make it executable.
+  sudo chmod 755 /etc/init.d/disable-transparent-hugepages
+
+
+Set it to start automatically on boot:
+    sudo update-rc.d disable-transparent-hugepages defaults
+
+
+5. Turn off dumps.
+
+  sudo nano /etc/default/apport
+
+  Find:
+  enabled=1
+
+  Replace with:
+
+  enabled=0
+
+6. Configure filesystem
+
+  sudo nano /etc/fstab
+
+  Add the noatime flag directly after defaults:
+
+LABEL=cloudimg-rootfs   /        ext4   defaults,noatime,discard        0 0
+
+
+7. Read Ahead Block Size
+
+  sudo crontab -e
+Choose nano by pressing 2 if this is your first time editing the crontab, and then append the following to the end of the file:
+
+  @reboot /sbin/blockdev --setra 32 /dev/xvda1
+
+
+8. Reboot the server.
+
+  sudo reboot
+
+
+========== MongoDB installation=============
+
+Use : https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-amazon/
+
+
+==Configure mongo==
+
+Change the mongo service to run on different ports. (to show CP principle)
+Mongo for server1 runs on port : 27017
+Mongo for server1 runs on port : 27018
+Mongo for server1 runs on port : 27019
+
+Change the
+Port : xxxxx parameter.
+
+Find and remove the following line entirely, or prefix it with a # to comment it out:
+
+bindIp: 127.0.0.1
+Next, find:
+
+#replication:
+Add the following below, replacing example-replica-set with a name for your replica set:
+
+replication:
+replSetName: "logdb-replica-set"
+
+
+===restart MongoDB to apply the changes:==
+sudo service mongod restart
+
+
+=========Initialize the Replica Set=======
+
+have the details on every mongoserve hosts file.
+
+54.241.150.45 mongoOne
+13.56.58.166 mongoTwo
+54.215.228.194 mongoThree
+
+Connect on any one of the servers.
+And then run the following commands:
+
+Initialize the replica set:
+
+rs.initiate()
+The command will automatically add the current member as the first member of the replica set.
+
+Add the second data member to the replica set:
+
+rs.add("db2.example.com")
+And finally, add the arbiter, making sure to pass in true as the second argument (which denotes that the member is an arbiter and not a data member).
+
+rs.add("arbiter1.example.com", true)
+
+
+=========Verification===========
+rs.status()
+
+{
+	"set" : "logdb-replica-set",
+	"date" : ISODate("2017-12-01T06:59:22.924Z"),
+	"myState" : 1,
+	"members" : [
+		{
+			"_id" : 0,
+			"name" : "mongoOne:27017",
+			"health" : 1,
+			"state" : 1,
+			"stateStr" : "PRIMARY",
+			"uptime" : 765,
+			"optime" : Timestamp(1512111545, 1),
+			"optimeDate" : ISODate("2017-12-01T06:59:05Z"),
+			"electionTime" : Timestamp(1512111336, 2),
+			"electionDate" : ISODate("2017-12-01T06:55:36Z"),
+			"configVersion" : 5,
+			"self" : true
+		},
+		{
+			"_id" : 1,
+			"name" : "mongoTwo:27018",
+			"health" : 1,
+			"state" : 2,
+			"stateStr" : "SECONDARY",
+			"uptime" : 205,
+			"optime" : Timestamp(1512111545, 1),
+			"optimeDate" : ISODate("2017-12-01T06:59:05Z"),
+			"lastHeartbeat" : ISODate("2017-12-01T06:59:21.275Z"),
+			"lastHeartbeatRecv" : ISODate("2017-12-01T06:59:21.224Z"),
+			"pingMs" : 0,
+			"syncingTo" : "mongoOne:27017",
+			"configVersion" : 5
+		},
+		{
+			"_id" : 2,
+			"name" : "mongoThree:27019",
+			"health" : 1,
+			"state" : 7,
+			"stateStr" : "ARBITER",
+			"uptime" : 13,
+			"lastHeartbeat" : ISODate("2017-12-01T06:59:21.275Z"),
+			"lastHeartbeatRecv" : ISODate("2017-12-01T06:59:21.277Z"),
+			"pingMs" : 0,
+			"syncingTo" : "mongoTwo:27018",
+			"configVersion" : 5
+		}
+	],
+	"ok" : 1
+}
+
+
+
+============Connecting to the replicaSet=============
+
+To connect to any member of the replica set, simply run:
+
+mongo db1.example.com
+Replace db1.example.com with any of the replica set member hostnames.
+
+To send queries to your replica set from your application, simply use a MongoDB driver along with the following connection string:
+
+mongodb://54.241.150.45:27017,13.56.58.166:27018,54.215.228.194:27019/logSystem?replicaSet=logdb-replica-set
+Make sure to replace example.com with your domain, db-name with the database you want to run queries against, and example-replica-set with the replica set name you configured in mongod.conf.
+
+
+54.241.150.45 mongoOne
+13.56.58.166 mongoTwo
+54.215.228.194 mongoThree
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a
