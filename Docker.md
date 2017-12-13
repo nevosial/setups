@@ -12,7 +12,7 @@ Start/Restart the service
 
 > sudo systemctl restart docker
 
-Check logs from the docker daemon.
+Check logs from the docker daemon
 
 > journalctl -u docker.service
 
@@ -20,6 +20,38 @@ Check logs from the docker daemon.
 
 > docker images
 
+##### Create container.
+
+> docker run -d -p <hostPort>:<containerPort> -t <imagename>
+  
+Example:
+
+> docker run -d --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123 mysql:latest
+
+###### Link two or more containers.
+
+> docker run --name <LocalContainerName> 
+  --link <LocalContainerName>:ActualContainerName
+  -p <hostport>:<ContainerPort>
+  <ImageName>
+  
+Example:
+
+1. Simple Go app listening on 3001 with a mongo backend linked to 27018
+
+> docker run -d --name goapi
+    --link mongodb:mongo
+    -p 3001:3000
+    -p 27018:27017
+    goapi
+
+Frontend is wordpress blog with a mysql as the backend DB. the blog is available at localhost:8080
+
+> docker run -d --name wordpressBlog
+    --link mysqldb:mysql
+    -p 8080:80
+    wordpress
+    
 
 ##### List running containers.
 
@@ -36,7 +68,14 @@ Can also create a temporary alias (for current terminal session only)
 > $ alias dps="docker ps -a --format 'table {{.ID}} \t {{.Names}} \t {{.Status}} \t {{.Ports}}'"
 
 
-##### Stop container.
+##### Start/Stop container.
+
+> docker stop <container_name>
+
+> docker start <container_name>
+
 ##### Remove container.
+
 ##### Remove images.
+
 ##### Create new containers.
