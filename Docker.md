@@ -6,13 +6,13 @@
 
 ` sudo systemctl status docker`
 
-Start/Restart the service
+- Start/Restart the service
 
 `sudo systemctl start docker`
 
 `sudo systemctl restart docker`
 
-Check logs from the docker daemon
+- Check logs from the docker daemon
 
 `journalctl -u docker.service`
 
@@ -33,6 +33,7 @@ Example:
 `docker inspect <ContainerName>`
 
 In order to get the ip address only:
+
 `docker inspect mysqldb | grep IPAddress`
 
 
@@ -42,10 +43,11 @@ In order to get the ip address only:
 
 Either use MWB or shell to connect:
 
-`# mysql -u <USERNAME> -p
- # Enter Password : <PASSWORD>`
+`# mysql -u <USERNAME> -p`
+ `#Enter Password : <PASSWORD>`
  
  Once connected,
+ 
  `mysql> show databases;`
  `mysql> use <DBNAME>`
 
