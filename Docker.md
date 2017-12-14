@@ -28,6 +28,12 @@ Example:
 
 > docker run -d --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123 mysql:latest
 
+
+###### SSH into container.
+
+> docker exec -it <ContainerName> /bin/bash
+
+
 ###### Link two or more containers.
 
 > docker run --name <LocalContainerName> 
@@ -74,8 +80,12 @@ Can also create a temporary alias (for current terminal session only)
 
 > docker start <container_name>
 
-##### Remove container.
+##### Remove container/images.
 
-##### Remove images.
+> docker rm <ContainerName>
+  
+> docker rmi <ImageID>
+  
 
-##### Create new containers.
+
+
