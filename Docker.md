@@ -1,6 +1,6 @@
-#### Quick Reference for Docker.  (Ubuntu 16+)
+### Quick Reference for Docker.  (Ubuntu 16+)
 
-##### Check docker service status and version.
+#### Check docker service status and version.
 
 ` docker version`
 
@@ -16,11 +16,11 @@
 
 `journalctl -u docker.service`
 
-##### List all images.
+#### List all images.
 
 ` docker images`
 
-##### Create container.
+#### Create container.
 
 `docker run -d -p <hostPort>:<containerPort> -t <imagename>`
   
@@ -28,7 +28,7 @@ Example:
 
 `docker run -d --name mysqldb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123 mysql:latest`
 
-###### Inspect container.
+#### Inspect container.
 
 `docker inspect <ContainerName>`
 
@@ -37,7 +37,7 @@ In order to get the ip address only:
 `docker inspect mysqldb | grep IPAddress`
 
 
-###### SSH into container.
+#### SSH into container.
 
 `docker exec -it <ContainerName> /bin/bash`
 
@@ -52,7 +52,7 @@ Either use MWB or shell to connect:
  `mysql> use <DBNAME>`
 
 
-###### Link two or more containers.
+#### Link two or more containers.
 
 `docker run --name <LocalContainerName> 
   --link <LocalContainerName>:ActualContainerName
@@ -77,7 +77,7 @@ Frontend is wordpress blog with a mysql as the backend DB. the blog is available
     wordpress`
     
 
-##### List running containers.
+#### List running containers.
 
 `docker ps -a --format 'table {{.ID}} \t {{.Names}} \t {{.Status}} \t {{.Ports}}'`
 
@@ -92,13 +92,13 @@ Can also create a temporary alias (for current terminal session only)
 `$ alias dps="docker ps -a --format 'table {{.ID}} \t {{.Names}} \t {{.Status}} \t {{.Ports}}'"`
 
 
-##### Start/Stop container.
+#### Start/Stop container.
 
 `docker stop <container_name>`
 
 `docker start <container_name>`
 
-##### Remove container/images.
+#### Remove container/images.
 
 `docker rm <ContainerName>`
   
