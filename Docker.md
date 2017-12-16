@@ -6,6 +6,7 @@
 #### Check docker service status and version.
 
 ` docker version`
+` docker info`
 
 ` sudo systemctl status docker`
 
