@@ -1,4 +1,4 @@
-# CEfHobDobVoakM3
+
 
 ### Quick Reference for Docker.  (Ubuntu 16+)
 
