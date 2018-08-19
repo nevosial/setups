@@ -24,6 +24,11 @@
 
 ` docker images`
 
+
+#### Build and image
+  `docker build --tag <image_name>:<tag> <location_of_Dockerfile>`
+
+
 #### Create container.
 
 `docker run -d -p <hostPort>:<containerPort> -t <imagename>`
