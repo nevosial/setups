@@ -112,6 +112,8 @@ Can also create a temporary alias (for current terminal session only)
 `docker rm <ContainerName>`
   
 `docker rmi <ImageID>`
+
+-----
   
 
 
