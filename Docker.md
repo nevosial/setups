@@ -35,6 +35,8 @@
 
 `-d : detached mode` It means that the newly created container will run in the background.
 
+Following example creates containers with exposing the ports of the application.
+
 `docker run -d -p <hostPort>:<containerPort> -t <imagename>`
   
 Example:
