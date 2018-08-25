@@ -31,6 +31,10 @@
 
 #### Create container.
 
+`docker run -d --name <my_application> <imageID>`
+
+`-d : detached mode` It means that the newly created container will run in the background.
+
 `docker run -d -p <hostPort>:<containerPort> -t <imagename>`
   
 Example:
