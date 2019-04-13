@@ -1,0 +1,13 @@
+# Setting path for Go
+export GOPATH=$HOME/go
+export GOBIN=$HOME/go/bin
+
+# Setting PATH for Python 3.6
+# The original version is saved in .bash_profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
+export PATH=$PATH:/usr/local/go/bin
+
+# Setting PATH for Python 3.6
+# The original version is saved in .bash_profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
+export PATH
