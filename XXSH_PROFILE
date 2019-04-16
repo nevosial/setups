@@ -11,3 +11,10 @@ export PATH=$PATH:/usr/local/go/bin
 # The original version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
 export PATH
+
+# Alias for k8s.
+alias kevents="kubectl get events --all-namespaces"
+alias k="kubectl"
+alias kgpo="kubectl get pods -n kube-system"
+alias kdpo="kubectl delete pods"
+alias klo="kubectl logs"
