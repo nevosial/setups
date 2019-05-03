@@ -12,7 +12,7 @@ export PATH=$PATH:/usr/local/go/bin
 PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
 export PATH
 
-# Alias for k8s.
+# Alias for fluentd on k8s.
 alias kevents="kubectl get events --all-namespaces"
 alias k="kubectl"
 alias kgpo="kubectl get pods -n kube-system"
@@ -20,3 +20,9 @@ alias kdpo="kubectl delete pods"
 alias klo="kubectl logs"
 alias kgtd="kubectl get cm -n kube-system td-agent-config -o yaml"
 alias ketd="kubectl edit cm -n kube-system td-agent-config -o yaml"
+
+# Alias for fluentd on local.
+alias configtd="sudo vi /etc/td-agent/td-agent.conf"
+alias restarttd="sudo /etc/init.d/td-agent restart"
+alias statustd="sudo /etc/init.d/td-agent status"
+alias stoptd="sudo /etc/init.d/td-agent stop"
