@@ -12,7 +12,7 @@ WORKDIR /app/
 # These are our static files copied from
 # project source tree to the current working
 # directory.
-COPY static/ static/
+COPY images/ static/
 
 # We would run "python -m http.server" locally
 # so lets make it an entry point.
